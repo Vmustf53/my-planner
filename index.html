@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>My Study Planner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#F7F4EF;--surface:#FFF;--surface2:#EFECE7;
+  --border:rgba(0,0,0,.09);--border2:rgba(0,0,0,.17);
+  --text:#1A1714;--text2:#6B6560;--text3:#A09A94;
+  --green:#2D7D5A;--green-bg:#E4F3EC;--green-text:#1A5C3E;
+  --red:#C94040;--red-bg:#FCEAEA;--red-text:#922D2D;
+  --accent:#C8823A;--accent-bg:#FDF3E7;--accent-text:#8A5420;
+  --blue:#2D6FBB;--blue-bg:#E8F1FB;--blue-text:#1A4A82;
+  --r:10px;--rl:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.5}
+a{color:var(--accent);text-decoration:none}
+button{font-family:'DM Sans',sans-serif}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:50;background:rgba(247,244,239,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px}
+.brand{font-family:'DM Serif Display',serif;font-size:20px;letter-spacing:-.02em}
+.brand span{color:var(--accent);font-style:italic}
+.nav-pills{display:flex;gap:8px}
+.pill{font-size:12px;font-weight:500;padding:4px 11px;border-radius:20px;white-space:nowrap}
+.pill-green{background:var(--green-bg);color:var(--green-text)}
+.pill-red{background:var(--red-bg);color:var(--red-text)}
+
+/* HERO */
+.hero{max-width:900px;margin:0 auto;padding:3rem 2rem 1.5rem}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,5vw,3rem);line-height:1.08;letter-spacing:-.03em}
+.hero h1 em{color:var(--accent);font-style:italic}
+.hero p{color:var(--text2);font-size:14px;margin-top:6px}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:900px;margin:0 auto 2rem;padding:0 2rem}
+.sc{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:1rem 1.25rem;text-align:center;transition:transform .15s}
+.sc:hover{transform:translateY(-2px)}
+.sc-num{font-family:'DM Serif Display',serif;font-size:2rem;line-height:1}
+.sc-lbl{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text2);margin-top:4px}
+
+/* MAIN */
+.main{max-width:900px;margin:0 auto;padding:0 2rem 5rem}
+.sec{margin-bottom:2rem}
+.sec-hd{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:10px}
+
+/* CHIPS */
+.chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chip{display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:5px 12px 5px 8px;font-size:13px;font-weight:500;user-select:none}
+.chip-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.chip-x{background:none;border:none;cursor:pointer;color:var(--text3);font-size:18px;line-height:1;padding:0 0 0 4px;display:flex;align-items:center}
+.chip-x:hover{color:var(--red)}
+.btn-add{background:none;border:1px dashed var(--border2);border-radius:20px;padding:5px 14px;font-size:13px;color:var(--text2);cursor:pointer;transition:.15s}
+.btn-add:hover{background:var(--surface);border-color:var(--accent);color:var(--accent)}
+
+/* PROGRESS */
+.prog-meta{display:flex;justify-content:space-between;font-size:13px;color:var(--text2);margin-bottom:8px}
+.prog-meta strong{color:var(--text)}
+.prog-track{height:6px;border-radius:3px;background:var(--surface2);overflow:hidden;margin-bottom:2rem}
+.prog-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#2D7D5A,#52C491);transition:width .4s cubic-bezier(.4,0,.2,1)}
+
+/* TABS */
+.tabs{display:flex;gap:4px;background:var(--surface2);border-radius:var(--r);padding:4px;width:fit-content;margin-bottom:1.25rem}
+.tab{padding:6px 18px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:none;color:var(--text2);transition:.15s}
+.tab.active{background:var(--surface);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+
+/* DAYS */
+.days{display:flex;flex-direction:column;gap:6px}
+.dr{display:grid;grid-template-columns:76px 1fr auto;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;animation:fu .25s ease both}
+.dr:hover{border-color:var(--border2)}
+.dr.today{border-left:3px solid var(--green)}
+.dr.exam-day{border-left:3px solid var(--red)}
+.dr.done-row{opacity:.6}
+@keyframes fu{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.dl{line-height:1.25}
+.dn{font-size:13px;font-weight:600}
+.dd{font-size:11px;color:var(--text3)}
+.dc{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.badge{font-size:10px;font-weight:600;letter-spacing:.04em;padding:3px 8px;border-radius:20px;white-space:nowrap;text-transform:uppercase}
+.b-today{background:var(--green-bg);color:var(--green-text)}
+.b-exam{background:var(--red-bg);color:var(--red-text)}
+.ti{flex:1;min-width:110px;font-size:13px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:6px 10px;color:var(--text);transition:.15s}
+.ti:focus{outline:none;border-color:var(--accent);background:#fff}
+.ti::placeholder{color:var(--text3)}
+.ss{font-size:12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:6px 8px;color:var(--text2);max-width:110px;cursor:pointer}
+.ss:focus{outline:none;border-color:var(--accent)}
+.cb{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--border2);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.15s}
+.cb svg{width:14px;height:14px;stroke:var(--text3);stroke-width:2.5;fill:none;transition:.15s}
+.cb:hover{border-color:var(--green)}
+.cb:hover svg{stroke:var(--green)}
+.cb.done{background:var(--green);border-color:var(--green)}
+.cb.done svg{stroke:#fff}
+
+/* ---- SYLLABUS TAB ---- */
+#tab-syllabus{display:none}
+.syl-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:1.5rem}
+.btn-primary{background:var(--accent);color:#fff;border:none;border-radius:var(--r);padding:8px 18px;font-size:13px;font-weight:500;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:6px}
+.btn-primary:hover{background:#b5722e}
+.btn-secondary{background:var(--surface);color:var(--text2);border:1px solid var(--border2);border-radius:var(--r);padding:8px 18px;font-size:13px;font-weight:500;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:6px}
+.btn-secondary:hover{background:var(--surface2)}
+.btn-danger{background:none;color:var(--red);border:1px solid var(--red-bg);border-radius:var(--r);padding:8px 16px;font-size:13px;font-weight:500;cursor:pointer;transition:.15s}
+.btn-danger:hover{background:var(--red-bg)}
+
+/* overall syllabus progress bar */
+.syl-overall{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:1.25rem 1.5rem;margin-bottom:1.5rem}
+.syl-overall-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+.syl-overall-top h3{font-family:'DM Serif Display',serif;font-size:17px}
+.syl-overall-pct{font-family:'DM Serif Display',serif;font-size:22px;color:var(--green)}
+.syl-bar{height:8px;border-radius:4px;background:var(--surface2);overflow:hidden}
+.syl-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#2D7D5A,#52C491);transition:width .4s}
+.syl-sub-stats{display:flex;gap:20px;margin-top:10px;flex-wrap:wrap}
+.syl-sub-stat{font-size:12px;color:var(--text2)}
+.syl-sub-stat strong{color:var(--text)}
+
+/* subject cards */
+.syl-subject{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);margin-bottom:14px;overflow:hidden;animation:fu .25s ease both}
+.syl-subj-head{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;user-select:none;transition:background .15s}
+.syl-subj-head:hover{background:var(--surface2)}
+.syl-subj-color{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.syl-subj-name{font-weight:600;font-size:15px;flex:1}
+.syl-subj-meta{font-size:12px;color:var(--text2);white-space:nowrap}
+.syl-subj-pct{font-size:13px;font-weight:600;color:var(--green);min-width:36px;text-align:right}
+.syl-chevron{font-size:18px;color:var(--text3);transition:transform .2s;line-height:1}
+.syl-subj-bar{height:3px;background:var(--surface2);overflow:hidden}
+.syl-subj-bar-fill{height:100%;background:linear-gradient(90deg,#2D7D5A,#52C491);transition:width .4s}
+.syl-units{padding:0 18px 14px;border-top:1px solid var(--border)}
+.syl-unit{margin-top:14px}
+.syl-unit-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.syl-unit-name{font-size:13px;font-weight:600;flex:1;color:var(--text)}
+.syl-unit-meta{font-size:11px;color:var(--text2)}
+.syl-unit-pct{font-size:12px;font-weight:600;color:var(--green);min-width:32px;text-align:right}
+.syl-unit-bar{height:3px;border-radius:2px;background:var(--surface2);overflow:hidden;margin-bottom:8px}
+.syl-unit-bar-fill{height:100%;border-radius:2px;background:var(--accent);transition:width .4s}
+.syl-topics{display:flex;flex-direction:column;gap:4px;padding-left:2px}
+.syl-topic{display:flex;align-items:center;gap:10px;padding:5px 8px;border-radius:8px;transition:background .12s;cursor:pointer}
+.syl-topic:hover{background:var(--surface2)}
+.syl-topic-check{width:17px;height:17px;border-radius:4px;border:1.5px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:.15s}
+.syl-topic-check svg{width:10px;height:10px;stroke:#fff;stroke-width:2.5;fill:none;opacity:0;transition:opacity .15s}
+.syl-topic.checked .syl-topic-check{background:var(--green);border-color:var(--green)}
+.syl-topic.checked .syl-topic-check svg{opacity:1}
+.syl-topic-label{font-size:13px;color:var(--text);flex:1;line-height:1.4}
+.syl-topic.checked .syl-topic-label{text-decoration:line-through;color:var(--text3)}
+.syl-topic-del{background:none;border:none;cursor:pointer;color:var(--text3);font-size:16px;padding:0 4px;opacity:0;transition:opacity .1s}
+.syl-topic:hover .syl-topic-del{opacity:1}
+.syl-topic-del:hover{color:var(--red)}
+.add-topic-row{display:flex;gap:6px;margin-top:6px}
+.add-topic-in{flex:1;font-size:13px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:5px 10px;color:var(--text)}
+.add-topic-in:focus{outline:none;border-color:var(--accent)}
+.add-topic-in::placeholder{color:var(--text3)}
+.add-topic-btn{background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:5px 12px;font-size:13px;cursor:pointer;color:var(--text2);transition:.15s}
+.add-topic-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+.add-unit-row{display:flex;gap:6px;margin-top:12px;padding-top:12px;border-top:1px dashed var(--border2)}
+.add-unit-in{flex:1;font-size:13px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:6px 10px;color:var(--text)}
+.add-unit-in:focus{outline:none;border-color:var(--accent)}
+.add-unit-in::placeholder{color:var(--text3)}
+.collapsed .syl-units{display:none}
+.collapsed .syl-chevron{transform:rotate(-90deg)}
+
+/* Upload area */
+.upload-area{border:2px dashed var(--border2);border-radius:var(--rl);padding:2rem;text-align:center;cursor:pointer;transition:.15s;margin-bottom:1.5rem}
+.upload-area:hover,.upload-area.drag{border-color:var(--accent);background:var(--accent-bg)}
+.upload-area p{font-size:14px;color:var(--text2);margin-top:8px}
+.upload-area strong{color:var(--text)}
+.upload-icon{font-size:2rem;color:var(--text3)}
+.upload-area input[type=file]{display:none}
+.parsing-banner{background:var(--accent-bg);border:1px solid rgba(200,130,58,.3);border-radius:var(--r);padding:12px 16px;font-size:13px;color:var(--accent-text);display:flex;align-items:center;gap:10px;margin-bottom:1rem}
+.spinner{width:16px;height:16px;border:2px solid rgba(200,130,58,.3);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Empty state */
+.syl-empty{text-align:center;padding:3rem 1rem;color:var(--text2)}
+.syl-empty-icon{font-size:2.5rem;margin-bottom:1rem;color:var(--text3)}
+.syl-empty p{font-size:14px;margin-bottom:1.25rem}
+
+/* Add subject modal for syllabus */
+#syl-subj-modal .modal{width:360px}
+.syl-modal-subj-list{display:flex;flex-direction:column;gap:6px;max-height:200px;overflow-y:auto;margin-bottom:14px}
+.syl-modal-subj-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border:1px solid var(--border);border-radius:var(--r);cursor:pointer;transition:.15s;background:var(--surface)}
+.syl-modal-subj-item:hover{border-color:var(--accent);background:var(--accent-bg)}
+.syl-modal-subj-item .chip-dot{width:11px;height:11px}
+.syl-modal-subj-item span{font-size:14px;font-weight:500}
+
+/* MODALS shared */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:200;align-items:center;justify-content:center}
+.overlay.open{display:flex}
+.modal{background:var(--surface);border-radius:var(--rl);border:1px solid var(--border);padding:1.5rem;width:320px;box-shadow:0 24px 60px rgba(0,0,0,.14);animation:pi .2s cubic-bezier(.34,1.56,.64,1) both;max-height:90vh;overflow-y:auto}
+@keyframes pi{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+.modal h3{font-family:'DM Serif Display',serif;font-size:20px;margin-bottom:1rem}
+.mlbl{font-size:11px;font-weight:600;color:var(--text2);display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em}
+.min{width:100%;font-size:14px;padding:8px 12px;border:1px solid var(--border2);border-radius:var(--r);background:var(--bg);color:var(--text);margin-bottom:14px}
+.min:focus{outline:none;border-color:var(--accent)}
+.cg{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.csw{width:26px;height:26px;border-radius:50%;cursor:pointer;border:2.5px solid transparent;transition:.1s}
+.csw:hover{transform:scale(1.15)}
+.csw.sel{border-color:var(--text);transform:scale(1.1)}
+.mbtns{display:flex;gap:8px}
+.mbtns button{flex:1;padding:9px;border-radius:var(--r);font-size:14px;font-weight:500;cursor:pointer;transition:.15s}
+.bc{background:none;border:1px solid var(--border2);color:var(--text2)}
+.bc:hover{background:var(--surface2)}
+.bconf{background:var(--accent);border:none;color:#fff}
+.bconf:hover{background:#b5722e}
+
+footer{text-align:center;padding:2rem;font-size:12px;color:var(--text3);border-top:1px solid var(--border);margin-top:2rem}
+
+@media(max-width:600px){
+  nav{padding:0 1rem}
+  .nav-pills .pill-green{display:none}
+  .hero,.main{padding-left:1rem;padding-right:1rem}
+  .stats{grid-template-columns:repeat(2,1fr);padding:0 1rem}
+  .dr{grid-template-columns:62px 1fr auto;gap:8px;padding:8px 10px}
+  .syl-subj-head{padding:12px 14px}
+  .syl-units{padding:0 14px 12px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">study<span>planner</span></div>
+  <div class="nav-pills">
+    <span class="pill pill-green" id="nav-left">21 days left</span>
+    <span class="pill pill-red">Exams: Jun 1–13</span>
+  </div>
+</nav>
+
+<div class="hero">
+  <h1>Your <em>exam</em><br>planner</h1>
+  <p>May 11 – Jun 13, 2026 &nbsp;·&nbsp; 2–3 hrs/day</p>
+</div>
+
+<div class="stats">
+  <div class="sc"><div class="sc-num" id="s-prep">21</div><div class="sc-lbl">Prep days</div></div>
+  <div class="sc"><div class="sc-num" id="s-exam">13</div><div class="sc-lbl">Exam days</div></div>
+  <div class="sc"><div class="sc-num" id="s-done">0</div><div class="sc-lbl">Days done</div></div>
+  <div class="sc"><div class="sc-num" id="s-sylpct">0%</div><div class="sc-lbl">Syllabus</div></div>
+</div>
+
+<div class="main">
+
+  <div class="sec">
+    <div class="sec-hd">Subjects</div>
+    <div class="chips" id="chips">
+      <button class="btn-add" onclick="openModal()">+ Add subject</button>
+    </div>
+  </div>
+
+  <div class="prog-meta">
+    <span>Schedule progress</span>
+    <strong id="prog-lbl">0 / 21 prep days done</strong>
+  </div>
+  <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('prep',this)">Preparation</button>
+    <button class="tab" onclick="switchTab('exam',this)">Exam days</button>
+    <button class="tab" onclick="switchTab('syllabus',this)">📚 Syllabus</button>
+  </div>
+
+  <div class="days" id="tab-prep"></div>
+  <div class="days" id="tab-exam" style="display:none"></div>
+  <div id="tab-syllabus"></div>
+
+</div>
+
+<footer>
+  Made for <strong>Vmustf53</strong> &nbsp;·&nbsp;
+  <a href="https://github.com/Vmustf53/my-planner" target="_blank">github.com/Vmustf53/my-planner</a>
+</footer>
+
+<!-- Subject modal -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <h3>Add subject</h3>
+    <label class="mlbl">Name</label>
+    <input class="min" type="text" id="m-name" placeholder="e.g. Machine Learning"/>
+    <label class="mlbl">Color</label>
+    <div class="cg" id="cg"></div>
+    <div class="mbtns">
+      <button class="bc" onclick="closeModal()">Cancel</button>
+      <button class="bconf" onclick="addSubject()">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Syllabus: pick subject modal -->
+<div class="overlay" id="syl-subj-modal">
+  <div class="modal" style="width:360px">
+    <h3>Add to syllabus</h3>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:14px">Choose which subject to add a syllabus for:</p>
+    <div class="syl-modal-subj-list" id="syl-subj-list"></div>
+    <div class="mbtns"><button class="bc" onclick="closeSylModal()">Cancel</button></div>
+  </div>
+</div>
+
+<script>
+/* ===================== DATA ===================== */
+const COLORS=['#7B68EE','#2D9CDB','#27AE60','#F2994A','#EB5757','#BB6BD9','#C8823A','#1A7F5A','#E84393','#16A2A2'];
+const DS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+let subjects=[], selColor=COLORS[0], dayState={};
+// syllabus: { subjectName: [ { name, topics:[{label,done}] } ] }
+let syllabus={};
+
+function load(){
+  try{
+    const s=localStorage.getItem('sp3-subj');  if(s) subjects=JSON.parse(s);
+    const d=localStorage.getItem('sp3-state'); if(d) dayState=JSON.parse(d);
+    const y=localStorage.getItem('sp3-syl');   if(y) syllabus=JSON.parse(y);
+  }catch(e){}
+}
+function save(){
+  localStorage.setItem('sp3-subj',  JSON.stringify(subjects));
+  localStorage.setItem('sp3-state', JSON.stringify(dayState));
+  localStorage.setItem('sp3-syl',   JSON.stringify(syllabus));
+}
+
+/* ===================== DATES ===================== */
+function getDays(y1,m1,d1,y2,m2,d2){
+  const days=[],c=new Date(y1,m1,d1),e=new Date(y2,m2,d2);
+  while(c<=e){days.push(new Date(c));c.setDate(c.getDate()+1);}return days;
+}
+function isToday(d){const t=new Date();return d.getDate()===t.getDate()&&d.getMonth()===t.getMonth()&&d.getFullYear()===t.getFullYear();}
+function dk(d){return d.toISOString().slice(0,10);}
+const prepDays=getDays(2026,4,11,2026,4,31);
+const examDays=getDays(2026,5,1,2026,5,13);
+
+/* ===================== COLORS ===================== */
+function buildCG(){
+  const g=document.getElementById('cg');g.innerHTML='';
+  COLORS.forEach((c,i)=>{
+    const s=document.createElement('div');
+    s.className='csw'+(i===0?' sel':'');s.style.background=c;
+    s.onclick=()=>{selColor=c;document.querySelectorAll('.csw').forEach(x=>x.classList.remove('sel'));s.classList.add('sel');};
+    g.appendChild(s);
+  });
+}
+
+/* ===================== SUBJECT MODAL ===================== */
+function openModal(){document.getElementById('overlay').classList.add('open');setTimeout(()=>document.getElementById('m-name').focus(),50);}
+function closeModal(){document.getElementById('overlay').classList.remove('open');document.getElementById('m-name').value='';}
+document.getElementById('overlay').addEventListener('click',function(e){if(e.target===this)closeModal();});
+document.getElementById('syl-subj-modal').addEventListener('click',function(e){if(e.target===this)closeSylModal();});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){closeModal();closeSylModal();}
+  if(e.key==='Enter'&&document.getElementById('overlay').classList.contains('open'))addSubject();
+});
+
+function addSubject(){
+  const n=document.getElementById('m-name').value.trim();if(!n)return;
+  subjects.push({name:n,color:selColor});save();renderSubjects();updateSelects();closeModal();
+}
+function removeSubject(i){
+  const name=subjects[i].name;
+  subjects.splice(i,1);
+  delete syllabus[name];
+  save();renderSubjects();updateSelects();renderSyllabus();
+}
+function renderSubjects(){
+  const w=document.getElementById('chips');w.innerHTML='';
+  subjects.forEach((s,i)=>{
+    const c=document.createElement('div');c.className='chip';
+    c.innerHTML=`<span class="chip-dot" style="background:${s.color}"></span>${s.name}<button class="chip-x" onclick="removeSubject(${i})" title="Remove">×</button>`;
+    w.appendChild(c);
+  });
+  const b=document.createElement('button');b.className='btn-add';b.textContent='+ Add subject';b.onclick=openModal;w.appendChild(b);
+  updateSylStat();
+}
+function updateSelects(){
+  document.querySelectorAll('.ss').forEach(sel=>{
+    const cur=sel.value;
+    sel.innerHTML='<option value="">— subject —</option>'+subjects.map(s=>`<option value="${s.name}">${s.name}</option>`).join('');
+    if(subjects.find(s=>s.name===cur))sel.value=cur;
+  });
+}
+
+/* ===================== DAY ROWS ===================== */
+function buildRow(d,isExam){
+  const key=dk(d),st=dayState[key]||{},today=isToday(d);
+  const row=document.createElement('div');
+  row.className='dr'+(isExam?' exam-day':'')+(today?' today':'')+(st.done?' done-row':'');
+  const opts='<option value="">— subject —</option>'+subjects.map(s=>`<option value="${s.name}">${s.name}</option>`).join('');
+  row.innerHTML=`
+    <div class="dl"><div class="dn">${DS[d.getDay()]}</div><div class="dd">${MS[d.getMonth()]} ${d.getDate()}</div></div>
+    <div class="dc">
+      ${today?'<span class="badge b-today">Today</span>':''}
+      ${isExam?'<span class="badge b-exam">Exam</span>':''}
+      <input class="ti" placeholder="${isExam?'Exam name / notes...':'Study task...'}" value="${(st.task||'').replace(/"/g,'&quot;')}"/>
+      ${!isExam?`<select class="ss">${opts}</select>`:''}
+    </div>
+    <button class="cb${st.done?' done':''}" title="${st.done?'Mark undone':'Mark done'}">
+      <svg viewBox="0 0 16 16"><polyline points="2,8 6,12 14,4"/></svg>
+    </button>`;
+  if(!isExam&&st.subject){const sel=row.querySelector('.ss');if(sel)sel.value=st.subject;}
+  row.querySelector('.ti').addEventListener('input',e=>{if(!dayState[key])dayState[key]={};dayState[key].task=e.target.value;save();});
+  const sel=row.querySelector('.ss');
+  if(sel)sel.addEventListener('change',e=>{if(!dayState[key])dayState[key]={};dayState[key].subject=e.target.value;save();});
+  row.querySelector('.cb').addEventListener('click',function(){
+    if(!dayState[key])dayState[key]={};
+    dayState[key].done=!dayState[key].done;save();
+    this.classList.toggle('done',dayState[key].done);
+    this.title=dayState[key].done?'Mark undone':'Mark done';
+    row.classList.toggle('done-row',dayState[key].done);
+    updateStats();
+  });
+  return row;
+}
+function buildGrids(){
+  const pg=document.getElementById('tab-prep');pg.innerHTML='';
+  prepDays.forEach(d=>pg.appendChild(buildRow(d,false)));
+  const eg=document.getElementById('tab-exam');eg.innerHTML='';
+  examDays.forEach(d=>eg.appendChild(buildRow(d,true)));
+}
+
+/* ===================== TABS ===================== */
+function switchTab(tab,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-prep').style.display=tab==='prep'?'flex':'none';
+  document.getElementById('tab-exam').style.display=tab==='exam'?'flex':'none';
+  document.getElementById('tab-syllabus').style.display=tab==='syllabus'?'block':'none';
+  if(tab==='syllabus')renderSyllabus();
+}
+
+/* ===================== STATS ===================== */
+function updateStats(){
+  const total=prepDays.length;
+  const done=prepDays.filter(d=>dayState[dk(d)]&&dayState[dk(d)].done).length;
+  const pct=total?Math.round(done/total*100):0;
+  document.getElementById('s-done').textContent=done;
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-lbl').textContent=`${done} / ${total} prep days done`;
+  document.getElementById('s-prep').textContent=total;
+  document.getElementById('s-exam').textContent=examDays.length;
+  const left=total-done;
+  document.getElementById('nav-left').textContent=`${left} day${left!==1?'s':''} left`;
+  updateSylStat();
+}
+function updateSylStat(){
+  let total=0,done=0;
+  subjects.forEach(s=>{
+    const units=syllabus[s.name]||[];
+    units.forEach(u=>{u.topics.forEach(t=>{total++;if(t.done)done++;});});
+  });
+  const pct=total?Math.round(done/total*100):0;
+  document.getElementById('s-sylpct').textContent=pct+'%';
+}
+
+/* ===================== SYLLABUS ===================== */
+function closeSylModal(){document.getElementById('syl-subj-modal').classList.remove('open');}
+
+function openSylSubjModal(){
+  const list=document.getElementById('syl-subj-list');
+  list.innerHTML='';
+  if(!subjects.length){
+    list.innerHTML='<p style="font-size:13px;color:var(--text2)">Add subjects first using the chips above.</p>';
+  } else {
+    subjects.forEach(s=>{
+      const item=document.createElement('div');
+      item.className='syl-modal-subj-item';
+      item.innerHTML=`<span class="chip-dot" style="background:${s.color}"></span><span>${s.name}</span>`;
+      item.onclick=()=>{
+        if(!syllabus[s.name])syllabus[s.name]=[];
+        // add default unit if empty
+        if(!syllabus[s.name].length)syllabus[s.name].push({name:'Unit I',topics:[]});
+        save();closeSylModal();renderSyllabus();
+      };
+      list.appendChild(item);
+    });
+  }
+  document.getElementById('syl-subj-modal').classList.add('open');
+}
+
+function sylTopicCount(subjectName){
+  const units=syllabus[subjectName]||[];
+  let total=0,done=0;
+  units.forEach(u=>{u.topics.forEach(t=>{total++;if(t.done)done++;});});
+  return{total,done};
+}
+
+function renderSyllabus(){
+  const container=document.getElementById('tab-syllabus');
+  container.innerHTML='';
+
+  // Overall progress card
+  let allTotal=0,allDone=0;
+  subjects.forEach(s=>{const c=sylTopicCount(s.name);allTotal+=c.total;allDone+=c.done;});
+  const allPct=allTotal?Math.round(allDone/allTotal*100):0;
+
+  const overall=document.createElement('div');
+  overall.className='syl-overall';
+  overall.innerHTML=`
+    <div class="syl-overall-top">
+      <h3>Overall syllabus coverage</h3>
+      <span class="syl-overall-pct">${allPct}%</span>
+    </div>
+    <div class="syl-bar"><div class="syl-bar-fill" style="width:${allPct}%"></div></div>
+    <div class="syl-sub-stats">
+      <div class="syl-sub-stat"><strong>${allDone}</strong> topics done</div>
+      <div class="syl-sub-stat"><strong>${allTotal-allDone}</strong> remaining</div>
+      <div class="syl-sub-stat"><strong>${allTotal}</strong> total topics</div>
+    </div>`;
+  container.appendChild(overall);
+
+  // Toolbar
+  const toolbar=document.createElement('div');
+  toolbar.className='syl-toolbar';
+  toolbar.innerHTML=`
+    <button class="btn-primary" onclick="openSylSubjModal()">＋ Add subject syllabus</button>
+    <label class="btn-secondary" style="cursor:pointer">
+      ⬆ Upload syllabus (PDF/image)
+      <input type="file" id="syl-upload" accept=".pdf,image/*" onchange="handleSylUpload(event)" style="display:none"/>
+    </label>`;
+  container.appendChild(toolbar);
+
+  // parsing banner placeholder
+  const banner=document.createElement('div');
+  banner.id='parsing-banner';banner.style.display='none';
+  banner.className='parsing-banner';
+  banner.innerHTML=`<div class="spinner"></div><span id="parsing-msg">Parsing syllabus with AI…</span>`;
+  container.appendChild(banner);
+
+  // Empty state
+  const hasSyl=subjects.some(s=>syllabus[s.name]&&syllabus[s.name].length);
+  if(!hasSyl){
+    const empty=document.createElement('div');
+    empty.className='syl-empty';
+    empty.innerHTML=`
+      <div class="syl-empty-icon">📖</div>
+      <p>No syllabus added yet.<br>Upload a PDF/image or add subjects and enter topics manually.</p>`;
+    container.appendChild(empty);
+    updateSylStat();return;
+  }
+
+  // Subject cards
+  subjects.forEach(subj=>{
+    if(!syllabus[subj.name]||!syllabus[subj.name].length)return;
+    const units=syllabus[subj.name];
+    const{total,done}=sylTopicCount(subj.name);
+    const pct=total?Math.round(done/total*100):0;
+
+    const card=document.createElement('div');
+    card.className='syl-subject';
+
+    // header
+    const head=document.createElement('div');
+    head.className='syl-subj-head';
+    head.innerHTML=`
+      <span class="syl-subj-color" style="background:${subj.color}"></span>
+      <span class="syl-subj-name">${subj.name}</span>
+      <span class="syl-subj-meta">${done}/${total} topics</span>
+      <span class="syl-subj-pct">${pct}%</span>
+      <span class="syl-chevron">⌄</span>`;
+    head.onclick=()=>{card.classList.toggle('collapsed');};
+    card.appendChild(head);
+
+    // thin progress bar under header
+    const bw=document.createElement('div');bw.className='syl-subj-bar';
+    const bf=document.createElement('div');bf.className='syl-subj-bar-fill';bf.style.width=pct+'%';
+    bw.appendChild(bf);card.appendChild(bw);
+
+    // units body
+    const body=document.createElement('div');body.className='syl-units';
+    units.forEach((unit,ui)=>{
+      const topDone=unit.topics.filter(t=>t.done).length;
+      const topTotal=unit.topics.length;
+      const upct=topTotal?Math.round(topDone/topTotal*100):0;
+
+      const ud=document.createElement('div');ud.className='syl-unit';
+      const uname=document.createElement('input');
+      uname.value=unit.name;uname.className='add-unit-in';
+      uname.style.cssText='font-weight:600;font-size:13px;background:none;border:none;border-bottom:1px solid transparent;border-radius:0;padding:0 0 2px;width:auto;min-width:80px;max-width:220px;';
+      uname.title='Click to rename unit';
+      uname.addEventListener('change',()=>{unit.name=uname.value;save();});
+      uname.addEventListener('focus',()=>uname.style.borderBottomColor='var(--accent)');
+      uname.addEventListener('blur',()=>uname.style.borderBottomColor='transparent');
+
+      const uhead=document.createElement('div');uhead.className='syl-unit-head';
+      uhead.appendChild(uname);
+      const umeta=document.createElement('span');umeta.className='syl-unit-meta';umeta.textContent=`${topDone}/${topTotal}`;
+      const upctEl=document.createElement('span');upctEl.className='syl-unit-pct';upctEl.textContent=upct+'%';
+      // delete unit button
+      const udel=document.createElement('button');
+      udel.style.cssText='background:none;border:none;cursor:pointer;color:var(--text3);font-size:13px;padding:0 4px;';
+      udel.title='Delete unit';udel.textContent='✕';
+      udel.onclick=e=>{e.stopPropagation();units.splice(ui,1);save();renderSyllabus();};
+      uhead.append(umeta,upctEl,udel);
+
+      const ubar=document.createElement('div');ubar.className='syl-unit-bar';
+      const ubarf=document.createElement('div');ubarf.className='syl-unit-bar-fill';ubarf.style.width=upct+'%';
+      ubar.appendChild(ubarf);
+
+      const topicsList=document.createElement('div');topicsList.className='syl-topics';
+      unit.topics.forEach((topic,ti)=>{
+        topicsList.appendChild(buildTopicEl(subj.name,ui,ti,topic));
+      });
+
+      // Add topic input
+      const atr=document.createElement('div');atr.className='add-topic-row';
+      const ati=document.createElement('input');ati.className='add-topic-in';ati.placeholder='Add topic… (press Enter)';
+      const atb=document.createElement('button');atb.className='add-topic-btn';atb.textContent='Add';
+      const doAdd=()=>{
+        const v=ati.value.trim();if(!v)return;
+        unit.topics.push({label:v,done:false});
+        save();renderSyllabus();
+      };
+      ati.addEventListener('keydown',e=>{if(e.key==='Enter')doAdd();});
+      atb.onclick=doAdd;
+      atr.append(ati,atb);
+
+      ud.append(uhead,ubar,topicsList,atr);
+      body.appendChild(ud);
+    });
+
+    // Add unit row
+    const addUr=document.createElement('div');addUr.className='add-unit-row';
+    const addUi=document.createElement('input');addUi.className='add-unit-in';addUi.placeholder='New unit name… (e.g. Unit VI)';
+    const addUb=document.createElement('button');addUb.className='add-topic-btn';addUb.textContent='Add unit';
+    const doAddUnit=()=>{
+      const v=addUi.value.trim();if(!v)return;
+      units.push({name:v,topics:[]});save();renderSyllabus();
+    };
+    addUi.addEventListener('keydown',e=>{if(e.key==='Enter')doAddUnit();});
+    addUb.onclick=doAddUnit;
+    addUr.append(addUi,addUb);
+    body.appendChild(addUr);
+
+    card.appendChild(body);
+    container.appendChild(card);
+  });
+
+  updateSylStat();
+}
+
+function buildTopicEl(subjName,ui,ti,topic){
+  const el=document.createElement('div');
+  el.className='syl-topic'+(topic.done?' checked':'');
+  el.innerHTML=`
+    <span class="syl-topic-check"><svg viewBox="0 0 12 12"><polyline points="1,6 4,9 11,3"/></svg></span>
+    <span class="syl-topic-label">${escHtml(topic.label)}</span>
+    <button class="syl-topic-del" title="Delete topic">✕</button>`;
+  el.querySelector('.syl-topic-check').addEventListener('click',e=>{
+    e.stopPropagation();
+    topic.done=!topic.done;save();renderSyllabus();
+  });
+  el.querySelector('.syl-topic-label').addEventListener('click',()=>{
+    topic.done=!topic.done;save();renderSyllabus();
+  });
+  el.querySelector('.syl-topic-del').addEventListener('click',e=>{
+    e.stopPropagation();
+    syllabus[subjName][ui].topics.splice(ti,1);save();renderSyllabus();
+  });
+  return el;
+}
+function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+/* ===================== AI UPLOAD ===================== */
+async function handleSylUpload(e){
+  const file=e.target.files[0];if(!file)return;
+  e.target.value='';
+
+  const banner=document.getElementById('parsing-banner');
+  const msg=document.getElementById('parsing-msg');
+  banner.style.display='flex';
+  msg.textContent='Reading file…';
+
+  // Convert file to base64
+  const b64=await new Promise((res,rej)=>{
+    const r=new FileReader();
+    r.onload=()=>res(r.result.split(',')[1]);
+    r.onerror=rej;
+    r.readAsDataURL(file);
+  });
+
+  const isImage=file.type.startsWith('image/');
+  const mediaType=file.type||'application/pdf';
+
+  msg.textContent='Extracting syllabus with AI…';
+
+  const prompt=`You are given a university syllabus document. Extract ALL subjects and their units/topics from it.
+
+Return ONLY a JSON array (no markdown, no explanation) in this exact format:
+[
+  {
+    "subject": "Subject Name",
+    "units": [
+      {
+        "name": "Unit I - Unit Title",
+        "topics": ["Topic 1", "Topic 2", "Topic 3"]
+      }
+    ]
+  }
+]
+
+Rules:
+- Extract every topic/subtopic mentioned, splitting by commas if needed
+- Each topic string should be a meaningful chunk (not too long, not too short)
+- Keep unit names as they appear (e.g. "Unit I - Introduction to ML")
+- If only one subject is shown, return it as a single-element array`;
+
+  try{
+    const body={
+      model:'claude-sonnet-4-20250514',
+      max_tokens:4000,
+      messages:[{
+        role:'user',
+        content:[
+          isImage
+            ?{type:'image',source:{type:'base64',media_type:mediaType,data:b64}}
+            :{type:'document',source:{type:'base64',media_type:'application/pdf',data:b64}},
+          {type:'text',text:prompt}
+        ]
+      }]
+    };
+
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(body)
+    });
+
+    if(!resp.ok)throw new Error('API error '+resp.status);
+    const data=await resp.json();
+    const raw=data.content.filter(c=>c.type==='text').map(c=>c.text).join('');
+    const cleaned=raw.replace(/```json|```/g,'').trim();
+    const parsed=JSON.parse(cleaned);
+
+    // Merge into syllabus, creating subjects if needed
+    let addedCount=0;
+    parsed.forEach(entry=>{
+      const name=entry.subject;
+      // find matching subject (fuzzy: substring match)
+      let subj=subjects.find(s=>s.name.toLowerCase()===name.toLowerCase())
+               ||subjects.find(s=>name.toLowerCase().includes(s.name.toLowerCase()))
+               ||subjects.find(s=>s.name.toLowerCase().includes(name.toLowerCase()));
+      if(!subj){
+        // auto-create subject with random color
+        const color=COLORS[subjects.length%COLORS.length];
+        subj={name,color};subjects.push(subj);
+      }
+      syllabus[subj.name]=entry.units.map(u=>({
+        name:u.name,
+        topics:u.topics.map(t=>({label:t,done:false}))
+      }));
+      addedCount++;
+    });
+    save();renderSubjects();updateSelects();
+    banner.style.display='none';
+    renderSyllabus();
+
+  }catch(err){
+    console.error(err);
+    msg.textContent='Could not parse syllabus. Please check the file and try again, or add topics manually.';
+    setTimeout(()=>{banner.style.display='none';},4000);
+  }
+}
+
+/* ===================== INIT ===================== */
+load();buildCG();renderSubjects();buildGrids();updateSelects();updateStats();
+</script>
+</body>
+</html>
