@@ -71,7 +71,7 @@ nav{position:sticky;top:0;z-index:50;background:rgba(247,244,239,.92);backdrop-f
 .tab.active{background:var(--surface);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.08)}
 
 /* DAYS — calendar widget grid */
-.days{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;align-items:start}
+.days{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;align-items:start}
 .dr{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:transform .18s,box-shadow .18s;animation:fu .25s ease both}
 .dr:hover{transform:translateY(-4px);box-shadow:0 10px 28px rgba(0,0,0,.1)}
 .dr.done-row{opacity:.5}
@@ -94,13 +94,13 @@ nav{position:sticky;top:0;z-index:50;background:rgba(247,244,239,.92);backdrop-f
 .dr.actual-exam .dr-hd{background:var(--red)}
 .dr.actual-exam .dr-num,.dr.actual-exam .dr-day,.dr.actual-exam .dr-mon{color:#fff}
 /* card body */
-.dr-body{padding:12px;display:flex;flex-direction:column;gap:8px;flex:1}
+.dr-body{padding:12px;display:flex;flex-direction:column;gap:8px}
 .dr-foot{display:flex;gap:6px;align-items:center}
 .badge{font-size:10px;font-weight:600;letter-spacing:.04em;padding:3px 8px;border-radius:20px;white-space:nowrap;text-transform:uppercase}
 .b-today{background:var(--green);color:#fff}
 .b-exam{background:rgba(255,255,255,.3);color:#fff;border:1px solid rgba(255,255,255,.4)}
 .b-exam-soft{background:var(--red-bg);color:var(--red-text)}
-.ti{width:100%;font-size:12.5px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:7px 10px;color:var(--text);transition:.15s;line-height:1.4}
+.ti{width:100%;font-size:12.5px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:7px 10px;color:var(--text);transition:.15s;line-height:1.45;resize:none;overflow:hidden;display:block;font-family:'DM Sans',sans-serif}
 .ti:focus{outline:none;border-color:var(--accent);background:#fff}
 .ti::placeholder{color:var(--text3)}
 .ss{flex:1;font-size:11px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:5px 6px;color:var(--text2);cursor:pointer;min-width:0}
@@ -228,7 +228,7 @@ footer{text-align:center;padding:2rem;font-size:12px;color:var(--text3);border-t
   .nav-pills .pill-green{display:none}
   .hero,.main{padding-left:1rem;padding-right:1rem}
   .stats{grid-template-columns:repeat(2,1fr);padding:0 1rem}
-  .days{grid-template-columns:repeat(2,1fr)}
+  .days{grid-template-columns:1fr}
   .syl-subj-head{padding:12px 14px}
   .syl-units{padding:0 14px 12px}
 }
@@ -316,7 +316,7 @@ footer{text-align:center;padding:2rem;font-size:12px;color:var(--text3);border-t
 <script>
 /* ===================== DATA ===================== */
 const COLORS=['#7B68EE','#2D9CDB','#27AE60','#F2994A','#EB5757','#BB6BD9','#C8823A','#1A7F5A','#E84393','#16A2A2'];
-const EXAM_DATES={'2026-06-01':'DEDV','2026-06-03':'Theory of Computation (TOC)','2026-06-05':'Machine Learning (ML)','2026-06-13':'Augmented Reality and Virtual Reality (ARVR)'};
+const EXAM_DATES={'2026-06-01':'Data Engineering and Data Visualization (DEDV)','2026-06-03':'Theory of Computation (TOC)','2026-06-05':'Machine Learning (ML)','2026-06-13':'Augmented Reality and Virtual Reality (ARVR)'};
 const DS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const MS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 let subjects=[], selColor=COLORS[0], dayState={};
@@ -331,9 +331,9 @@ function load(){
   }catch(e){}
 
   // ── v2 seed: force clean re-injection on all browsers ──────────────────
-  if(!localStorage.getItem('sp3-seed-v4')) {
-    // Remove old v1 flags
-    ['sp3-seed-toc','sp3-seed-dedv','sp3-seed-ml','sp3-seed-arvr','sp3-seed-schedule','sp3-seed-v2','sp3-seed-v3']
+  if(!localStorage.getItem('sp3-seed-v5')) {
+    // Remove old flags
+    ['sp3-seed-toc','sp3-seed-dedv','sp3-seed-ml','sp3-seed-arvr','sp3-seed-schedule','sp3-seed-v2','sp3-seed-v3','sp3-seed-v4']
       .forEach(k=>localStorage.removeItem(k));
 
     // Preserve any topic done-state the user may have ticked
@@ -352,10 +352,10 @@ function load(){
 
     // Rebuild subjects list cleanly
     subjects = [
-      { name: "Theory of Computation (TOC)",                     color: "#7B68EE" },
-      { name: "DEDV",                                             color: "#2D9CDB" },
-      { name: "Machine Learning (ML)",                            color: "#27AE60" },
-      { name: "Augmented Reality and Virtual Reality (ARVR)",    color: "#F2994A" }
+      { name: "Theory of Computation (TOC)",                            color: "#7B68EE" },
+      { name: "Data Engineering and Data Visualization (DEDV)",          color: "#2D9CDB" },
+      { name: "Machine Learning (ML)",                                   color: "#27AE60" },
+      { name: "Augmented Reality and Virtual Reality (ARVR)",            color: "#F2994A" }
     ];
 
     // ── TOC ──────────────────────────────────────────────────────────────
@@ -432,7 +432,7 @@ function load(){
     ]);
 
     // ── DEDV ──────────────────────────────────────────────────────────────
-    syllabus["DEDV"] = mergeDone("DEDV", [
+    syllabus["Data Engineering and Data Visualization (DEDV)"] = mergeDone("Data Engineering and Data Visualization (DEDV)", [
       { name: "Unit I - Data Pre-processing: An Overview", topics: [
         { label: "Defining Data Engineering and KDD", done: false },
         { label: "Overview of the Data Engineering Ecosystem", done: false },
@@ -591,15 +591,15 @@ function load(){
       "2026-05-25": { subject: "Machine Learning (ML)", task: "ML: Revise Unit I & II — Supervised, SVM, Ensembles, Confusion Matrix + PYQs" },
 
       // ── DEDV — 6 days (May 26–31) — exam Jun 1 ────────────────────────
-      "2026-05-26": { subject: "DEDV", task: "DEDV: Unit IV — Tableau Marks & Channels, Workbooks, Worksheets (TOP PRIORITY)" },
-      "2026-05-27": { subject: "DEDV", task: "DEDV: Unit IV — Dashboard Design, User Interaction, PowerBI + common mistakes" },
-      "2026-05-28": { subject: "DEDV", task: "DEDV: Unit III — Bar, Histogram, Box plot, Scatter, Regression, Time Series" },
-      "2026-05-29": { subject: "DEDV", task: "DEDV: Unit II — Data Warehouse, OLAP, Star/Snowflake schema, ROLAP, MOLAP" },
-      "2026-05-30": { subject: "DEDV", task: "DEDV: Unit I — KDD, Data Engineering, Pre-processing, Central Tendency, Dispersion" },
-      "2026-05-31": { subject: "DEDV", task: "DEDV: Full revision — all 4 units + PYQs" },
+      "2026-05-26": { subject: "Data Engineering and Data Visualization (DEDV)", task: "DEDV: Unit IV — Tableau Marks & Channels, Workbooks, Worksheets (TOP PRIORITY)" },
+      "2026-05-27": { subject: "Data Engineering and Data Visualization (DEDV)", task: "DEDV: Unit IV — Dashboard Design, User Interaction, PowerBI + common mistakes" },
+      "2026-05-28": { subject: "Data Engineering and Data Visualization (DEDV)", task: "DEDV: Unit III — Bar, Histogram, Box plot, Scatter, Regression, Time Series" },
+      "2026-05-29": { subject: "Data Engineering and Data Visualization (DEDV)", task: "DEDV: Unit II — Data Warehouse, OLAP, Star/Snowflake schema, ROLAP, MOLAP" },
+      "2026-05-30": { subject: "Data Engineering and Data Visualization (DEDV)", task: "DEDV: Unit I — KDD, Data Engineering, Pre-processing, Central Tendency, Dispersion" },
+      "2026-05-31": { subject: "Data Engineering and Data Visualization (DEDV)", task: "DEDV: Full revision — all 4 units + PYQs" },
 
       // ── EXAM PERIOD ────────────────────────────────────────────────────
-      "2026-06-01": { task: "EXAM: DEDV | Post-exam: Revise TOC Unit IV & V (PDA + TM + Decidability)" },
+      "2026-06-01": { task: "EXAM: Data Engineering & Data Visualization (DEDV) | Post-exam: Revise TOC Unit IV & V (PDA + TM + Decidability)" },
       "2026-06-02": { task: "TOC INTENSIVE: Full revision — all units, focus NP, Turing, PDA" },
       "2026-06-03": { task: "EXAM: TOC | Post-exam: ML Unit III & IV quick revision (Clustering + Regression)" },
       "2026-06-04": { task: "ML INTENSIVE: Full revision — Unsupervised, Advanced Models, Trends" },
@@ -621,7 +621,7 @@ function load(){
       if(plan[date].subject) dayState[date].subject = plan[date].subject;
     });
 
-    localStorage.setItem('sp3-seed-v4', '1');
+    localStorage.setItem('sp3-seed-v5', '1');
     save();
   }
 }
@@ -710,8 +710,9 @@ function buildRow(d,isExam){
 
   // ── body ──
   const body=document.createElement('div'); body.className='dr-body';
-  const ti=document.createElement('input'); ti.className='ti';
+  const ti=document.createElement('textarea'); ti.className='ti';
   ti.placeholder=isExam?'Exam / notes…':'Study task…'; ti.value=(st.task||'');
+  ti.rows=3; ti.style.minHeight='58px';
   const foot=document.createElement('div'); foot.className='dr-foot';
   if(!isExam){
     const sel=document.createElement('select'); sel.className='ss';
@@ -726,7 +727,10 @@ function buildRow(d,isExam){
   body.append(ti,foot);
   row.append(hd,body);
 
-  ti.addEventListener('input',e=>{if(!dayState[key])dayState[key]={};dayState[key].task=e.target.value;save();});
+  // auto-grow textarea up to ~3 lines, then stop
+  function autoGrow(){ti.style.height='auto';const maxH=Math.min(ti.scrollHeight,80);ti.style.height=maxH+'px';}
+  ti.addEventListener('input',e=>{if(!dayState[key])dayState[key]={};dayState[key].task=e.target.value;save();autoGrow();});
+  requestAnimationFrame(autoGrow);
   cb.addEventListener('click',function(){
     if(!dayState[key])dayState[key]={};
     dayState[key].done=!dayState[key].done; save();
