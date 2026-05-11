@@ -313,6 +313,356 @@ function load(){
     const d=localStorage.getItem('sp3-state'); if(d) dayState=JSON.parse(d);
     const y=localStorage.getItem('sp3-syl');   if(y) syllabus=JSON.parse(y);
   }catch(e){}
+
+  // AI Injection: TOC Syllabus
+  if(!localStorage.getItem('sp3-seed-toc')) {
+    if(!subjects.find(s=>s.name==="Theory of Computation (TOC)")) {
+      subjects.push({ name: "Theory of Computation (TOC)", color: "#7B68EE" });
+    }
+    syllabus["Theory of Computation (TOC)"] = [
+      {
+        name: "Unit I - INTRODUCTION TO FINITE AUTOMATA",
+        topics: [
+          { label: "Introduction to Formal language", done: false },
+          { label: "Basic concepts: Symbol, Alphabet, String", done: false },
+          { label: "Introduction to Finite Automata", done: false },
+          { label: "State transition graph", done: false },
+          { label: "Transition table", done: false },
+          { label: "Acceptance of a string", done: false },
+          { label: "Acceptance of a Language", done: false },
+          { label: "Deterministic finite Automata (DFA)-Formal Definition", done: false },
+          { label: "Non Deterministic finite Automata (NFA)-Formal Definition", done: false },
+          { label: "Non Deterministic finite Automata (NFA) with epsilon transition", done: false },
+          { label: "Equivalence of NFA and DFA", done: false },
+          { label: "Conversion from NFA to DFA", done: false },
+          { label: "Conversion from NFA with epsilon transition to DFA", done: false },
+          { label: "Minimization of Finite Automata", done: false },
+          { label: "Finite Automata with output: Moore and Mealy machine", done: false },
+          { label: "Moore machine to Mealy machine conversion", done: false },
+          { label: "Mealy to Moore machine conversion", done: false }
+        ]
+      },
+      {
+        name: "Unit II - REGULAR EXPRESSION",
+        topics: [
+          { label: "Formal definition", done: false },
+          { label: "Operators of regular expression and their precedence", done: false },
+          { label: "Identities of Regular Expressions", done: false },
+          { label: "Equivalence between Regular expressions and DFAs", done: false },
+          { label: "Construction of Regular Expression of the given Language", done: false },
+          { label: "Construction of Language from the RE, FA and RE", done: false },
+          { label: "FA to RE Using Arden's Theorem", done: false },
+          { label: "RE to DFA", done: false },
+          { label: "Closure properties of RLs", done: false },
+          { label: "Applications of Regular Expressions", done: false },
+          { label: "Pumping Lemma for regular expressions", done: false }
+        ]
+      },
+      {
+        name: "Unit III - CONTEXT FREE GRAMMAR(CFG) and Pushdown Automata",
+        topics: [
+          { label: "Formal definition of Grammar", done: false },
+          { label: "Chomsky Hierarchy", done: false },
+          { label: "CFG: Formal definition of CFG", done: false },
+          { label: "Derivations", done: false },
+          { label: "Parse Tree", done: false },
+          { label: "Ambiguity in grammars and languages", done: false },
+          { label: "Language Specification using CFG", done: false },
+          { label: "Normal Forms: Chomsky Normal form and Greibach Normal Form", done: false },
+          { label: "Closure properties of CFL", done: false },
+          { label: "Applications of CFG", done: false }
+        ]
+      },
+      {
+        name: "Unit VI - PUSH DOWN AUTOMATA(PDA)",
+        topics: [
+          { label: "Pushdown Automata: Definition", done: false },
+          { label: "Acceptance of PDA", done: false },
+          { label: "Designing PDA", done: false },
+          { label: "Deterministic Pushdown Automata", done: false },
+          { label: "Nondeterministic Pushdown Automata", done: false },
+          { label: "PDA to CFG and CFG to PDA conversion", done: false }
+        ]
+      },
+      {
+        name: "Unit V - TURING MACHINE",
+        topics: [
+          { label: "Formal definition of a Turing machine", done: false },
+          { label: "Church- Turing Hypothesis and intuitive notion of algorithm", done: false },
+          { label: "Instantaneous Description of TM", done: false },
+          { label: "Recursive Languages and Recursively Enumerable Languages", done: false },
+          { label: "Design of Turing machines", done: false },
+          { label: "Nondeterministic Turing machines", done: false },
+          { label: "Universal TM, Multitape TM, Multistack TM", done: false },
+          { label: "Basic Introduction to Complexity", done: false },
+          { label: "Concept of Decidability, Un-decidability of Halting Problem", done: false },
+          { label: "Examples of undecidable problems: Post Correspondence Problem", done: false },
+          { label: "Introductory ideas on Time Complexity of deterministic and non-deterministic Turing Machines", done: false },
+          { label: "P and NP, Examples of NP-Complete and NP hard problems", done: false },
+          { label: "The universal and diagonalization languages", done: false },
+          { label: "reduction between languages and Rice's theorem", done: false },
+          { label: "undecidable problems about languages", done: false }
+        ]
+      }
+    ];
+    localStorage.setItem('sp3-seed-toc', '1');
+    save();
+  }
+
+  // AI Injection: DEDV Syllabus
+  if(!localStorage.getItem('sp3-seed-dedv')) {
+    if(!subjects.find(s=>s.name==="DEDV")) {
+      subjects.push({ name: "DEDV", color: "#2D9CDB" });
+    }
+    syllabus["DEDV"] = [
+      {
+        name: "Unit I - Data Pre-processing: An Overview",
+        topics: [
+          { label: "Defining Data Engineering and KDD", done: false },
+          { label: "Overview of the Data Engineering Ecosystem", done: false },
+          { label: "Data Engineering Lifecycle", done: false },
+          { label: "Data objects and attribute types", done: false },
+          { label: "Data Characteristics, Types of Data", done: false },
+          { label: "Measures of Central Tendency: Mean, Median, Mode, Mid-range", done: false },
+          { label: "Measures of Dispersion: Range, Variance, Mean Deviation, Standard Deviation", done: false },
+          { label: "Data Pre-processing: An Overview", done: false },
+          { label: "Methods: Data Cleaning, Data Integration, Data Reduction, Data Transformation", done: false }
+        ]
+      },
+      {
+        name: "Unit II - Data Warehouse",
+        topics: [
+          { label: "Introduction to Data Warehouse, OLTP and OLAP", done: false },
+          { label: "Data Warehouse architecture", done: false },
+          { label: "Data Warehouse Modeling: A Multidimensional Data Model", done: false },
+          { label: "Data Warehouse Design: Stars, Snowflakes, and Fact Constellations Schemas", done: false },
+          { label: "Dimensions: The Role of Concept Hierarchies", done: false },
+          { label: "Measures: Their Categorization and Computation", done: false },
+          { label: "Typical OLAP Operations", done: false },
+          { label: "ROLAP, MOLAP", done: false },
+          { label: "Materialized views", done: false },
+          { label: "Integration of Data Warehouse with other technologies", done: false }
+        ]
+      },
+      {
+        name: "Unit III - Overview of Data Visualization",
+        topics: [
+          { label: "Data Abstraction, Task Abstraction", done: false },
+          { label: "Dimensions and Measures - Analysis: Four Levels for Validation", done: false },
+          { label: "Statistical charts (Bar Chart, stacked bar chart, Line Chart, Histogram, Pie chart)", done: false },
+          { label: "Frequency Polygon, Box plot, Scatter plot, Regression curves", done: false },
+          { label: "Time Series data visualization", done: false },
+          { label: "Text data visualization", done: false },
+          { label: "Spatial Data Visualization", done: false }
+        ]
+      },
+      {
+        name: "Unit IV - Data Visualization Tools and Dashboard Creation",
+        topics: [
+          { label: "Tableau functions and logics: Marks and Channels-Arrange Tables, Arrange Spatial Data", done: false },
+          { label: "Facets into multiple views", done: false },
+          { label: "Data Dashboard- Taxonomies, User Interaction", done: false },
+          { label: "Organizational Functions", done: false },
+          { label: "Dashboard Design – Worksheets, Workbooks, Workbook Optimization", done: false },
+          { label: "Protection and common mistakes", done: false },
+          { label: "Dashboard creation using visualization tools like Tableau/PowerBI", done: false }
+        ]
+      }
+    ];
+    localStorage.setItem('sp3-seed-dedv', '1');
+    save();
+  }
+
+  // AI Injection: ML Syllabus
+  if(!localStorage.getItem('sp3-seed-ml')) {
+    if(!subjects.find(s=>s.name==="Machine Learning (ML)")) {
+      subjects.push({ name: "Machine Learning (ML)", color: "#27AE60" });
+    }
+    syllabus["Machine Learning (ML)"] = [
+      {
+        name: "Unit I - Introduction to ML",
+        topics: [
+          { label: "Types of ML Supervised, Unsupervised and Reinforcement Learning", done: false },
+          { label: "Applications of ML", done: false },
+          { label: "Data pre-processing for ML", done: false },
+          { label: "Statistics for ML", done: false },
+          { label: "Feature Engineering: Feature Selection, Feature transformation", done: false },
+          { label: "Requirement of Dimensionality reduction", done: false },
+          { label: "Training, validation and Testing: Train and Test method", done: false },
+          { label: "Cross Validation, Stratified cross fold", done: false },
+          { label: "Model representations", done: false }
+        ]
+      },
+      {
+        name: "Unit II - Supervised Learning Techniques",
+        topics: [
+          { label: "Classification: Decision Trees: Overfitting, Truncation and Pruning", done: false },
+          { label: "Support Vector Machine: Maximum Margin Classifier, Kernels, SVM Case Study", done: false },
+          { label: "Nearest Neighbour Classification", done: false },
+          { label: "Model Evaluation and Selection: Overfitting and Under fitting", done: false },
+          { label: "Confusion Matrix, Accuracy, Fl-Score, Precision and Recall", done: false },
+          { label: "Cost Benefit and ROC Curves", done: false },
+          { label: "Techniques to Improve Classification Accuracy, bias, variance", done: false },
+          { label: "Introducing Ensemble Methods: Bagging, Boosting and Ada-Boost, Random Forests", done: false },
+          { label: "Class-Imbalance: Oversampling and Under sampling, Case Study using SMOTE", done: false }
+        ]
+      },
+      {
+        name: "Unit III - Unsupervised learning",
+        topics: [
+          { label: "Association Rule Mining: Apriori algorithm", done: false },
+          { label: "Clustering and its types, K-Means, Hierarchical clustering", done: false },
+          { label: "K-Medoids and density-based clustering(DBSCAN)", done: false },
+          { label: "Measures of quality of clustering", done: false },
+          { label: "BIRCH, CURE", done: false },
+          { label: "Performance Metrics: Mean Absolute Error, Mean Squared Error, Root Mean Square Error, Root Mean Square Log Error", done: false },
+          { label: "Basics of Vector Quantization", done: false }
+        ]
+      },
+      {
+        name: "Unit IV - Advanced Machine Learning Models",
+        topics: [
+          { label: "Advanced Machine Learning Models: Regression: Model evaluation", done: false },
+          { label: "Least squares regression, Regularization, LASSO", done: false },
+          { label: "Applications of regression", done: false },
+          { label: "Basics of Hidden Markov Models (HMM) with forward-backward and Viterbi algorithms", done: false },
+          { label: "Anomaly and outlier detection methods", done: false }
+        ]
+      },
+      {
+        name: "Unit V - Trends in Machine Learning",
+        topics: [
+          { label: "Bayesian Belief Networks", done: false },
+          { label: "Concepts and Mechanisms", done: false },
+          { label: "Genetic Algorithms", done: false },
+          { label: "Reinforcement Learning", done: false },
+          { label: "Active Learning, Transfer Learning", done: false },
+          { label: "Advance ML applications", done: false }
+        ]
+      }
+    ];
+    localStorage.setItem('sp3-seed-ml', '1');
+    save();
+  }
+
+  // AI Injection: ARVR Syllabus
+  if(!localStorage.getItem('sp3-seed-arvr')) {
+    if(!subjects.find(s=>s.name==="Augmented Reality and Virtual Reality (ARVR)")) {
+      subjects.push({ name: "Augmented Reality and Virtual Reality (ARVR)", color: "#F2994A" });
+    }
+    syllabus["Augmented Reality and Virtual Reality (ARVR)"] = [
+      {
+        name: "Unit I - Introduction to Augmented Reality and Virtual Reality",
+        topics: [
+          { label: "Introduction, History, Relationship between AR with other technologies", done: false },
+          { label: "Augmented Reality Concepts: Visual and Auditory depth cues, dimensionality, Registration and Latency", done: false },
+          { label: "Augmented Reality Hardware: Sensors, Processors and Displays", done: false },
+          { label: "Augmented Reality Software: Software for creating AR applications, Software for content creation for AR application, other software related to AR", done: false },
+          { label: "Introduction to Virtual Reality: Introduction, Historical and Recent Developments in Virtual Reality", done: false },
+          { label: "Primary Features and Components of Virtual Reality", done: false },
+          { label: "Key Elements of Virtual Reality Experience", done: false },
+          { label: "Representation of the Virtual World", done: false }
+        ]
+      },
+      {
+        name: "Unit II - Multiple Models of Input and Output Interface in Virtual Reality",
+        topics: [
+          { label: "Input - Tracker, Sensor, Digital Glove, Movement Capture, Video-based Input, 3D Scanner etc.", done: false },
+          { label: "Output - Visual / Auditory / Haptic Devices", done: false },
+          { label: "Interactive Techniques in Virtual Reality: Body Track, Hand Gesture, 3D Menus, Object Grasp", done: false }
+        ]
+      },
+      {
+        name: "Unit III - Development Tools and Frameworks in Virtual Reality",
+        topics: [
+          { label: "3D Computer Graphics: Perspective Projection, 3D Clipping, Simple 3D modeling", done: false },
+          { label: "Illumination and Reflection models, Shading algorithms", done: false },
+          { label: "Frameworks of Software Development Tools in Virtual Reality", done: false },
+          { label: "Light and Perspective in VR: Eye Tracking process, Psychological effects of VR", done: false },
+          { label: "Virtual Reality: Planning, Staging and Storyboarding", done: false },
+          { label: "UI design for AR & VR", done: false },
+          { label: "Creating 360 degree Videos, VR Content Creation & Interaction", done: false }
+        ]
+      },
+      {
+        name: "Unit IV - Computer Vision and Techniques for Augmented Reality",
+        topics: [
+          { label: "Computer Vision for Augmented Reality: Marker Tracking, Multiple-Camera Infrared Tracking", done: false },
+          { label: "Natural Feature Tracking by Detection, Simultaneous Localization and Mapping, Outdoor Tracking", done: false },
+          { label: "Marker-based approach: Introduction to marker-based tracking", done: false },
+          { label: "Marker types: Template markers, 2D barcode markers, imperceptible markers", done: false },
+          { label: "Marker-less approach: Localization based augmentation, real world examples", done: false },
+          { label: "Tracking methods: Visual tracking, feature based tracking, hybrid tracking", done: false }
+        ]
+      },
+      {
+        name: "Unit V - Future Trends and Applications",
+        topics: [
+          { label: "Applications of VR: Digital Entertainment: VR Technology in Film & TV Production", done: false },
+          { label: "VR Technology in Physical Exercises and Games", done: false },
+          { label: "VR in Education, VR in Real Estate", done: false },
+          { label: "Applications of AR: AR in E-commerce application, AR in Education, AR in Fashion Industry, AR in Defence/Military", done: false },
+          { label: "Applications of Mixed Reality: Case Study", done: false },
+          { label: "Applications of Extended Reality: Case Study", done: false },
+          { label: "Field of Research, Future Trends, Challenges and Technology future", done: false }
+        ]
+      }
+    ];
+    localStorage.setItem('sp3-seed-arvr', '1');
+    save();
+  }
+
+  // AI Injection: Study Schedule
+  if(!localStorage.getItem('sp3-seed-schedule')) {
+    const plan = {
+      "2026-05-11": { subject: "Theory of Computation (TOC)", task: "Start TOC: Unit IV (Pushdown Automata)" },
+      "2026-05-12": { subject: "Theory of Computation (TOC)", task: "TOC: Unit IV Practice & PDA Design" },
+      "2026-05-13": { subject: "Theory of Computation (TOC)", task: "TOC: Unit V (Turing Machines) basics" },
+      "2026-05-14": { subject: "Theory of Computation (TOC)", task: "TOC: Unit V Decidability & Complexity" },
+      "2026-05-15": { subject: "Theory of Computation (TOC)", task: "TOC: Revise Unit I & II (Midsem)" },
+      "2026-05-16": { subject: "Theory of Computation (TOC)", task: "TOC: Revise Unit III (Midsem) & PYQs" },
+      "2026-05-17": { subject: "Theory of Computation (TOC)", task: "TOC: Final review of all important topics" },
+      
+      "2026-05-18": { subject: "Machine Learning (ML)", task: "Start ML: Unit III (Unsupervised Learning & Clustering)" },
+      "2026-05-19": { subject: "Machine Learning (ML)", task: "ML: Unit III Metrics & Vector Quantization" },
+      "2026-05-20": { subject: "Machine Learning (ML)", task: "ML: Unit IV (Advanced Models & Regression)" },
+      "2026-05-21": { subject: "Machine Learning (ML)", task: "ML: Unit IV (HMM & Anomaly Detection)" },
+      "2026-05-22": { subject: "Machine Learning (ML)", task: "ML: Unit V (Trends, Bayesian Networks, RL)" },
+      "2026-05-23": { subject: "Machine Learning (ML)", task: "ML: Revise Unit I & II (Midsem syllabus)" },
+      
+      "2026-05-24": { subject: "Augmented Reality and Virtual Reality (ARVR)", task: "Start ARVR: Unit III (Dev Tools & 3D Graphics)" },
+      "2026-05-25": { subject: "Augmented Reality and Virtual Reality (ARVR)", task: "ARVR: Unit III (Light, Perspective & VR Content)" },
+      "2026-05-26": { subject: "Augmented Reality and Virtual Reality (ARVR)", task: "ARVR: Unit IV (Computer Vision & Markers)" },
+      "2026-05-27": { subject: "Augmented Reality and Virtual Reality (ARVR)", task: "ARVR: Unit V (Applications & Future Trends)" },
+      "2026-05-28": { subject: "Augmented Reality and Virtual Reality (ARVR)", task: "ARVR: Revise Unit I & II (Midsem syllabus)" },
+      
+      "2026-05-29": { subject: "DEDV", task: "Start DEDV: Unit IV (Tableau, Dashboards - High Priority)" },
+      "2026-05-30": { subject: "DEDV", task: "DEDV: Unit I (Pre-processing, Central Tendency)" },
+      "2026-05-31": { subject: "DEDV", task: "DEDV: Revise Unit II & III (Midsem) & Final prep" },
+
+      "2026-06-01": { task: "EXAM: DEDV | Post-exam: Start revising TOC Unit IV & V" },
+      "2026-06-02": { task: "Prep for TOC: Revise all units, focus on Turing Machines & PDAs" },
+      "2026-06-03": { task: "EXAM: TOC | Post-exam: Start revising ML Unit III & IV" },
+      "2026-06-04": { task: "Prep for ML: Revise all units, focus on Advanced Models & Trends" },
+      "2026-06-05": { task: "EXAM: ML | Post-exam: Relax & light ARVR overview" },
+      "2026-06-06": { task: "ARVR: Deep dive into Unit III (3D Graphics & Dev Tools)" },
+      "2026-06-07": { task: "ARVR: Deep dive into Unit IV (Computer Vision & Tracking)" },
+      "2026-06-08": { task: "ARVR: Deep dive into Unit V (Applications)" },
+      "2026-06-09": { task: "ARVR: Revise Unit I (Intro to AR & VR)" },
+      "2026-06-10": { task: "ARVR: Revise Unit II (Input/Output Interfaces)" },
+      "2026-06-11": { task: "ARVR: Practice UI Design & Storyboarding concepts" },
+      "2026-06-12": { task: "ARVR: Final complete syllabus revision" },
+      "2026-06-13": { task: "EXAM: ARVR | DONE WITH EXAMS! 🎉" }
+    };
+    
+    Object.keys(plan).forEach(date => {
+      if(!dayState[date]) dayState[date] = {};
+      dayState[date].task = plan[date].task;
+      if(plan[date].subject) dayState[date].subject = plan[date].subject;
+    });
+    localStorage.setItem('sp3-seed-schedule', '1');
+    save();
+  }
 }
 function save(){
   localStorage.setItem('sp3-subj',  JSON.stringify(subjects));
