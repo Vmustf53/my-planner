@@ -70,27 +70,40 @@ nav{position:sticky;top:0;z-index:50;background:rgba(247,244,239,.92);backdrop-f
 .tab{padding:6px 18px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:none;color:var(--text2);transition:.15s}
 .tab.active{background:var(--surface);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.08)}
 
-/* DAYS */
-.days{display:flex;flex-direction:column;gap:6px}
-.dr{display:grid;grid-template-columns:76px 1fr auto;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;animation:fu .25s ease both}
-.dr:hover{border-color:var(--border2)}
-.dr.today{border-left:3px solid var(--green)}
-.dr.exam-day{border-left:3px solid var(--red)}
-.dr.actual-exam{border-left:4px solid var(--red);background:var(--red-bg)}
-.dr.actual-exam .dn,.dr.actual-exam .dd{color:var(--red-text)}
-.dr.done-row{opacity:.6}
-@keyframes fu{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
-.dl{line-height:1.25}
-.dn{font-size:13px;font-weight:600}
-.dd{font-size:11px;color:var(--text3)}
-.dc{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+/* DAYS — calendar widget grid */
+.days{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;align-items:start}
+.dr{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:transform .18s,box-shadow .18s;animation:fu .25s ease both}
+.dr:hover{transform:translateY(-4px);box-shadow:0 10px 28px rgba(0,0,0,.1)}
+.dr.done-row{opacity:.5}
+@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+/* card header */
+.dr-hd{padding:16px 16px 12px;border-bottom:1px solid var(--border);background:var(--surface2)}
+.dr-day{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text3)}
+.dr-num{font-family:'DM Serif Display',serif;font-size:3rem;line-height:1;letter-spacing:-.03em;color:var(--text);margin:2px 0}
+.dr-mon{font-size:11px;color:var(--text2);font-weight:500}
+.dr-badges{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+/* today */
+.dr.today .dr-hd{background:var(--green-bg)}
+.dr.today .dr-num{color:var(--green)}
+.dr.today .dr-day{color:var(--green-text)}
+/* exam period (all Jun) */
+.dr.exam-day .dr-hd{background:#fff5f5}
+.dr.exam-day .dr-num{color:var(--red)}
+.dr.exam-day .dr-day{color:var(--red-text)}
+/* actual exam date */
+.dr.actual-exam .dr-hd{background:var(--red)}
+.dr.actual-exam .dr-num,.dr.actual-exam .dr-day,.dr.actual-exam .dr-mon{color:#fff}
+/* card body */
+.dr-body{padding:12px;display:flex;flex-direction:column;gap:8px;flex:1}
+.dr-foot{display:flex;gap:6px;align-items:center}
 .badge{font-size:10px;font-weight:600;letter-spacing:.04em;padding:3px 8px;border-radius:20px;white-space:nowrap;text-transform:uppercase}
-.b-today{background:var(--green-bg);color:var(--green-text)}
-.b-exam{background:var(--red-bg);color:var(--red-text)}
-.ti{flex:1;min-width:110px;font-size:13px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:6px 10px;color:var(--text);transition:.15s}
+.b-today{background:var(--green);color:#fff}
+.b-exam{background:rgba(255,255,255,.3);color:#fff;border:1px solid rgba(255,255,255,.4)}
+.b-exam-soft{background:var(--red-bg);color:var(--red-text)}
+.ti{width:100%;font-size:12.5px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:7px 10px;color:var(--text);transition:.15s;line-height:1.4}
 .ti:focus{outline:none;border-color:var(--accent);background:#fff}
 .ti::placeholder{color:var(--text3)}
-.ss{font-size:12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:6px 8px;color:var(--text2);max-width:110px;cursor:pointer}
+.ss{flex:1;font-size:11px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:5px 6px;color:var(--text2);cursor:pointer;min-width:0}
 .ss:focus{outline:none;border-color:var(--accent)}
 .cb{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--border2);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.15s}
 .cb svg{width:14px;height:14px;stroke:var(--text3);stroke-width:2.5;fill:none;transition:.15s}
@@ -215,7 +228,7 @@ footer{text-align:center;padding:2rem;font-size:12px;color:var(--text3);border-t
   .nav-pills .pill-green{display:none}
   .hero,.main{padding-left:1rem;padding-right:1rem}
   .stats{grid-template-columns:repeat(2,1fr);padding:0 1rem}
-  .dr{grid-template-columns:62px 1fr auto;gap:8px;padding:8px 10px}
+  .days{grid-template-columns:repeat(2,1fr)}
   .syl-subj-head{padding:12px 14px}
   .syl-units{padding:0 14px 12px}
 }
@@ -680,28 +693,43 @@ function updateSelects(){
 /* ===================== DAY ROWS ===================== */
 function buildRow(d,isExam){
   const key=dk(d),st=dayState[key]||{},today=isToday(d);
-  const row=document.createElement('div');
   const isActualExam=isExam&&!!EXAM_DATES[key];
+  const row=document.createElement('div');
   row.className='dr'+(isExam?' exam-day':'')+(isActualExam?' actual-exam':'')+(today?' today':'')+(st.done?' done-row':'');
-  const opts='<option value="">— subject —</option>'+subjects.map(s=>`<option value="${s.name}">${s.name}</option>`).join('');
-  row.innerHTML=`
-    <div class="dl"><div class="dn">${DS[d.getDay()]}</div><div class="dd">${MS[d.getMonth()]} ${d.getDate()}</div></div>
-    <div class="dc">
-      ${today?'<span class="badge b-today">Today</span>':''}
-      ${isExam?'<span class="badge b-exam">Exam</span>':''}
-      <input class="ti" placeholder="${isExam?'Exam name / notes...':'Study task...'}" value="${(st.task||'').replace(/"/g,'&quot;')}"/>
-      ${!isExam?`<select class="ss">${opts}</select>`:''}
-    </div>
-    <button class="cb${st.done?' done':''}" title="${st.done?'Mark undone':'Mark done'}">
-      <svg viewBox="0 0 16 16"><polyline points="2,8 6,12 14,4"/></svg>
-    </button>`;
-  if(!isExam&&st.subject){const sel=row.querySelector('.ss');if(sel)sel.value=st.subject;}
-  row.querySelector('.ti').addEventListener('input',e=>{if(!dayState[key])dayState[key]={};dayState[key].task=e.target.value;save();});
-  const sel=row.querySelector('.ss');
-  if(sel)sel.addEventListener('change',e=>{if(!dayState[key])dayState[key]={};dayState[key].subject=e.target.value;save();});
-  row.querySelector('.cb').addEventListener('click',function(){
+
+  // ── header ──
+  const hd=document.createElement('div'); hd.className='dr-hd';
+  const dayLabel=document.createElement('div'); dayLabel.className='dr-day'; dayLabel.textContent=DS[d.getDay()].toUpperCase();
+  const numEl=document.createElement('div');   numEl.className='dr-num';   numEl.textContent=d.getDate();
+  const monEl=document.createElement('div');   monEl.className='dr-mon';   monEl.textContent=MS[d.getMonth()].toUpperCase();
+  const badgesEl=document.createElement('div');badgesEl.className='dr-badges';
+  if(today){const b=document.createElement('span');b.className='badge b-today';b.textContent='Today';badgesEl.appendChild(b);}
+  if(isActualExam){const b=document.createElement('span');b.className='badge b-exam';b.textContent='📝 EXAM';badgesEl.appendChild(b);}
+  else if(isExam){const b=document.createElement('span');b.className='badge b-exam-soft';b.textContent='Exam';badgesEl.appendChild(b);}
+  hd.append(dayLabel,numEl,monEl,badgesEl);
+
+  // ── body ──
+  const body=document.createElement('div'); body.className='dr-body';
+  const ti=document.createElement('input'); ti.className='ti';
+  ti.placeholder=isExam?'Exam / notes…':'Study task…'; ti.value=(st.task||'');
+  const foot=document.createElement('div'); foot.className='dr-foot';
+  if(!isExam){
+    const sel=document.createElement('select'); sel.className='ss';
+    sel.innerHTML='<option value="">— subject —</option>'+subjects.map(s=>`<option value="${s.name}">${s.name}</option>`).join('');
+    if(st.subject)sel.value=st.subject;
+    sel.addEventListener('change',e=>{if(!dayState[key])dayState[key]={};dayState[key].subject=e.target.value;save();});
+    foot.appendChild(sel);
+  }
+  const cb=document.createElement('button'); cb.className='cb'+(st.done?' done':''); cb.title=st.done?'Mark undone':'Mark done';
+  cb.innerHTML='<svg viewBox="0 0 16 16"><polyline points="2,8 6,12 14,4"/></svg>';
+  foot.appendChild(cb);
+  body.append(ti,foot);
+  row.append(hd,body);
+
+  ti.addEventListener('input',e=>{if(!dayState[key])dayState[key]={};dayState[key].task=e.target.value;save();});
+  cb.addEventListener('click',function(){
     if(!dayState[key])dayState[key]={};
-    dayState[key].done=!dayState[key].done;save();
+    dayState[key].done=!dayState[key].done; save();
     this.classList.toggle('done',dayState[key].done);
     this.title=dayState[key].done?'Mark undone':'Mark done';
     row.classList.toggle('done-row',dayState[key].done);
