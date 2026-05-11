@@ -318,9 +318,9 @@ function load(){
   }catch(e){}
 
   // ── v2 seed: force clean re-injection on all browsers ──────────────────
-  if(!localStorage.getItem('sp3-seed-v3')) {
+  if(!localStorage.getItem('sp3-seed-v4')) {
     // Remove old v1 flags
-    ['sp3-seed-toc','sp3-seed-dedv','sp3-seed-ml','sp3-seed-arvr','sp3-seed-schedule','sp3-seed-v2']
+    ['sp3-seed-toc','sp3-seed-dedv','sp3-seed-ml','sp3-seed-arvr','sp3-seed-schedule','sp3-seed-v2','sp3-seed-v3']
       .forEach(k=>localStorage.removeItem(k));
 
     // Preserve any topic done-state the user may have ticked
@@ -556,51 +556,51 @@ function load(){
       ]}
     ]);
 
-    // ── SCHEDULE v3 — optimised, starts May 11 ────────────────────────────
+    // ── SCHEDULE v4 — TOC(9) ML(6) DEDV(6) ARVR(Jun5-13) ────────────────
     const plan = {
-      // ── TOC (hardest, 6 days: May 11–16) ──────────────────────────────
+      // ── TOC — 9 days (May 11–19) — hardest subject, most time ──────────
       "2026-05-11": { subject: "Theory of Computation (TOC)", task: "TOC: Unit IV — PDA: Definition, Acceptance, Designing PDA" },
-      "2026-05-12": { subject: "Theory of Computation (TOC)", task: "TOC: Unit IV — Deterministic & Nondeterministic PDA + PDA↔CFG" },
-      "2026-05-13": { subject: "Theory of Computation (TOC)", task: "TOC: Unit V — Turing Machine basics, Church-Turing, Instantaneous Description" },
-      "2026-05-14": { subject: "Theory of Computation (TOC)", task: "TOC: Unit V — Decidability, Halting Problem, NP, Rice's theorem" },
-      "2026-05-15": { subject: "Theory of Computation (TOC)", task: "TOC: Revise Unit I — DFA, NFA, Minimization, Moore & Mealy" },
-      "2026-05-16": { subject: "Theory of Computation (TOC)", task: "TOC: Revise Unit II & III — RE, Arden's theorem, CFG, PYQs" },
+      "2026-05-12": { subject: "Theory of Computation (TOC)", task: "TOC: Unit IV — Deterministic & Nondeterministic PDA + PDA↔CFG conversion" },
+      "2026-05-13": { subject: "Theory of Computation (TOC)", task: "TOC: Unit V — Turing Machine: Formal definition, Church-Turing Hypothesis" },
+      "2026-05-14": { subject: "Theory of Computation (TOC)", task: "TOC: Unit V — Design of TM, Nondeterministic TM, Instantaneous Description" },
+      "2026-05-15": { subject: "Theory of Computation (TOC)", task: "TOC: Unit V — Universal TM, Multitape TM, Multistack TM + Complexity" },
+      "2026-05-16": { subject: "Theory of Computation (TOC)", task: "TOC: Unit V — Decidability, Halting Problem, Post Correspondence Problem" },
+      "2026-05-17": { subject: "Theory of Computation (TOC)", task: "TOC: Unit V — P & NP, NP-Complete, NP-Hard, Rice's theorem + undecidable" },
+      "2026-05-18": { subject: "Theory of Computation (TOC)", task: "TOC: Revise Unit I — DFA, NFA, epsilon NFA, Minimization, Moore & Mealy" },
+      "2026-05-19": { subject: "Theory of Computation (TOC)", task: "TOC: Revise Unit II (RE, Arden's) & Unit III (CFG, Chomsky) + PYQs" },
 
-      // ── DEDV (exam Jun 1 — prep May 17–21, 5 days) ────────────────────
-      "2026-05-17": { subject: "DEDV", task: "DEDV: Unit IV — Tableau: Marks, Channels, Facets, Workbooks (TOP PRIORITY)" },
-      "2026-05-18": { subject: "DEDV", task: "DEDV: Unit IV — Dashboard Design, PowerBI, common mistakes" },
-      "2026-05-19": { subject: "DEDV", task: "DEDV: Unit III — Data Visualization charts (Bar, Histogram, Box plot, Scatter)" },
-      "2026-05-20": { subject: "DEDV", task: "DEDV: Unit II — Data Warehouse, OLAP, Star/Snowflake schema, ROLAP/MOLAP" },
-      "2026-05-21": { subject: "DEDV", task: "DEDV: Unit I — Pre-processing, KDD, Central Tendency + Full revision" },
+      // ── ML — 6 days (May 20–25) ────────────────────────────────────────
+      "2026-05-20": { subject: "Machine Learning (ML)", task: "ML: Unit III — K-Means, Hierarchical, K-Medoids clustering" },
+      "2026-05-21": { subject: "Machine Learning (ML)", task: "ML: Unit III — DBSCAN, BIRCH, CURE + Apriori + MAE/MSE/RMSE Metrics" },
+      "2026-05-22": { subject: "Machine Learning (ML)", task: "ML: Unit IV — Regression, Least Squares, Regularization, LASSO" },
+      "2026-05-23": { subject: "Machine Learning (ML)", task: "ML: Unit IV — HMM (Viterbi, Forward-Backward) + Anomaly Detection" },
+      "2026-05-24": { subject: "Machine Learning (ML)", task: "ML: Unit V — Bayesian Networks, Genetic Algorithms, RL, Transfer Learning" },
+      "2026-05-25": { subject: "Machine Learning (ML)", task: "ML: Revise Unit I & II — Supervised, SVM, Ensembles, Confusion Matrix + PYQs" },
 
-      // ── ML (exam Jun 5 — prep May 22–26, 5 days) ─────────────────────
-      "2026-05-22": { subject: "Machine Learning (ML)", task: "ML: Unit III — Clustering: K-Means, DBSCAN, Hierarchical, BIRCH, CURE" },
-      "2026-05-23": { subject: "Machine Learning (ML)", task: "ML: Unit III — Association (Apriori) + Performance Metrics (MAE, MSE, RMSE)" },
-      "2026-05-24": { subject: "Machine Learning (ML)", task: "ML: Unit IV — Regression, LASSO, Regularization, HMM, Anomaly Detection" },
-      "2026-05-25": { subject: "Machine Learning (ML)", task: "ML: Unit V — Bayesian Networks, Genetic Algorithms, RL, Transfer Learning" },
-      "2026-05-26": { subject: "Machine Learning (ML)", task: "ML: Revise Unit I & II — Supervised Learning, SVM, Ensemble Methods + PYQs" },
-
-      // ── ARVR (exam Jun 13 — prep May 27–31, 5 days) ──────────────────
-      "2026-05-27": { subject: "Augmented Reality and Virtual Reality (ARVR)", task: "ARVR: Unit III — 3D Graphics, Projection, Illumination, Shading, Eye Tracking" },
-      "2026-05-28": { subject: "Augmented Reality and Virtual Reality (ARVR)", task: "ARVR: Unit IV — Computer Vision, Marker & Markerless Tracking, SLAM" },
-      "2026-05-29": { subject: "Augmented Reality and Virtual Reality (ARVR)", task: "ARVR: Unit V — Applications: VR, AR, MR, XR + Future Trends" },
-      "2026-05-30": { subject: "Augmented Reality and Virtual Reality (ARVR)", task: "ARVR: Revise Unit I — Intro to AR/VR, Hardware, Software, Components" },
-      "2026-05-31": { subject: "Augmented Reality and Virtual Reality (ARVR)", task: "ARVR: Revise Unit II — Input/Output Interfaces, Interactive Techniques + PYQs" },
+      // ── DEDV — 6 days (May 26–31) — exam Jun 1 ────────────────────────
+      "2026-05-26": { subject: "DEDV", task: "DEDV: Unit IV — Tableau Marks & Channels, Workbooks, Worksheets (TOP PRIORITY)" },
+      "2026-05-27": { subject: "DEDV", task: "DEDV: Unit IV — Dashboard Design, User Interaction, PowerBI + common mistakes" },
+      "2026-05-28": { subject: "DEDV", task: "DEDV: Unit III — Bar, Histogram, Box plot, Scatter, Regression, Time Series" },
+      "2026-05-29": { subject: "DEDV", task: "DEDV: Unit II — Data Warehouse, OLAP, Star/Snowflake schema, ROLAP, MOLAP" },
+      "2026-05-30": { subject: "DEDV", task: "DEDV: Unit I — KDD, Data Engineering, Pre-processing, Central Tendency, Dispersion" },
+      "2026-05-31": { subject: "DEDV", task: "DEDV: Full revision — all 4 units + PYQs" },
 
       // ── EXAM PERIOD ────────────────────────────────────────────────────
-      "2026-06-01": { task: "EXAM: DEDV | Post-exam: Revise TOC Unit IV & V (PDA + TM)" },
-      "2026-06-02": { task: "TOC INTENSIVE: Turing Machines, Decidability, NP, PDA revision" },
-      "2026-06-03": { task: "EXAM: TOC | Post-exam: Revise ML Unit III (Clustering) & Unit IV" },
-      "2026-06-04": { task: "ML INTENSIVE: Advanced Models, Regression, HMM, Trends revision" },
-      "2026-06-05": { task: "EXAM: ML | Post-exam: ARVR light review, rest & recover" },
-      "2026-06-06": { task: "ARVR: Unit III deep revision — 3D Graphics, Dev Tools, UI Design" },
-      "2026-06-07": { task: "ARVR: Unit IV deep revision — Computer Vision, All Tracking methods" },
-      "2026-06-08": { task: "ARVR: Unit V deep revision — VR/AR/MR/XR Applications" },
-      "2026-06-09": { task: "ARVR: Unit I revision — Intro, AR Hardware, Software, VR Components" },
-      "2026-06-10": { task: "ARVR: Unit II revision — Input/Output Interfaces, Interactive Techniques" },
-      "2026-06-11": { task: "ARVR: PYQs + weak topic focus (UI Design, Storyboarding, SLAM)" },
-      "2026-06-12": { task: "ARVR: Final full syllabus revision — all 5 units" },
-      "2026-06-13": { task: "EXAM: ARVR — ALL DONE! Great work, you nailed it!" }
+      "2026-06-01": { task: "EXAM: DEDV | Post-exam: Revise TOC Unit IV & V (PDA + TM + Decidability)" },
+      "2026-06-02": { task: "TOC INTENSIVE: Full revision — all units, focus NP, Turing, PDA" },
+      "2026-06-03": { task: "EXAM: TOC | Post-exam: ML Unit III & IV quick revision (Clustering + Regression)" },
+      "2026-06-04": { task: "ML INTENSIVE: Full revision — Unsupervised, Advanced Models, Trends" },
+
+      // ── ARVR — 8 days (Jun 5–13) after ML exam ────────────────────────
+      "2026-06-05": { task: "EXAM: ML | ARVR starts: Unit III — 3D Graphics, Projection, Illumination, Shading" },
+      "2026-06-06": { task: "ARVR: Unit III — Eye Tracking, Psychological effects, VR Planning, UI Design, 360 Videos" },
+      "2026-06-07": { task: "ARVR: Unit IV — Computer Vision, Marker Tracking, SLAM, Outdoor Tracking" },
+      "2026-06-08": { task: "ARVR: Unit IV — Markerless approach, Visual/Feature/Hybrid tracking methods" },
+      "2026-06-09": { task: "ARVR: Unit V — VR/AR/MR/XR Applications + Future Trends & Research" },
+      "2026-06-10": { task: "ARVR: Revise Unit I — Intro to AR/VR, Hardware, Software, Key Elements" },
+      "2026-06-11": { task: "ARVR: Revise Unit II — Input/Output Interfaces, Interactive Techniques" },
+      "2026-06-12": { task: "ARVR: Final full revision — all 5 units + PYQs" },
+      "2026-06-13": { task: "EXAM: ARVR — ALL DONE! You crushed it!" }
     };
     Object.keys(plan).forEach(date => {
       if(!dayState[date]) dayState[date] = {};
@@ -608,7 +608,7 @@ function load(){
       if(plan[date].subject) dayState[date].subject = plan[date].subject;
     });
 
-    localStorage.setItem('sp3-seed-v3', '1');
+    localStorage.setItem('sp3-seed-v4', '1');
     save();
   }
 }
