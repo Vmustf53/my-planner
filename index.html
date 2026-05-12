@@ -331,21 +331,32 @@ function load(){
   }catch(e){}
 
   // ── v2 seed: force clean re-injection on all browsers ──────────────────
-  if(!localStorage.getItem('sp3-seed-v5')) {
+  if(!localStorage.getItem('sp3-seed-v6')) {
     // Remove old flags
-    ['sp3-seed-toc','sp3-seed-dedv','sp3-seed-ml','sp3-seed-arvr','sp3-seed-schedule','sp3-seed-v2','sp3-seed-v3','sp3-seed-v4']
+    ['sp3-seed-toc','sp3-seed-dedv','sp3-seed-ml','sp3-seed-arvr','sp3-seed-schedule','sp3-seed-v2','sp3-seed-v3','sp3-seed-v4','sp3-seed-v5']
       .forEach(k=>localStorage.removeItem(k));
 
     // Preserve any topic done-state the user may have ticked
     const oldSyl = JSON.parse(JSON.stringify(syllabus));
+    // midsem units that are already studied: used to pre-tick topics
+    // DEDV: units 2,3 (index 1,2) | TOC: units 1,2,3 (index 0,1,2) | ML: units 1,2 (index 0,1) | ARVR: units 1,2 (index 0,1)
+    const MIDSEM_DONE = {
+      "Theory of Computation (TOC)": [0,1,2],
+      "Data Engineering and Data Visualization (DEDV)": [1,2],
+      "Machine Learning (ML)": [0,1],
+      "Augmented Reality and Virtual Reality (ARVR)": [0,1]
+    };
     function mergeDone(subjectName, units) {
       const old = oldSyl[subjectName] || [];
+      const midsemUnitIdxs = MIDSEM_DONE[subjectName] || [];
       return units.map((unit, ui) => ({
         ...unit,
         topics: unit.topics.map((topic, ti) => {
           const oldUnit = old[ui];
           const oldTopic = oldUnit && oldUnit.topics[ti];
-          return { ...topic, done: (oldTopic && oldTopic.done) || false };
+          // tick if user already ticked it OR it is a midsem unit
+          const done = (oldTopic && oldTopic.done) || midsemUnitIdxs.includes(ui);
+          return { ...topic, done };
         })
       }));
     }
@@ -621,7 +632,7 @@ function load(){
       if(plan[date].subject) dayState[date].subject = plan[date].subject;
     });
 
-    localStorage.setItem('sp3-seed-v5', '1');
+    localStorage.setItem('sp3-seed-v6', '1');
     save();
   }
 }
@@ -752,8 +763,8 @@ function buildGrids(){
 function switchTab(tab,btn){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('tab-prep').style.display=tab==='prep'?'flex':'none';
-  document.getElementById('tab-exam').style.display=tab==='exam'?'flex':'none';
+  document.getElementById('tab-prep').style.display=tab==='prep'?'grid':'none';
+  document.getElementById('tab-exam').style.display=tab==='exam'?'grid':'none';
   document.getElementById('tab-syllabus').style.display=tab==='syllabus'?'block':'none';
   if(tab==='syllabus')renderSyllabus();
 }
